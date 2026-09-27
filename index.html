@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aurora Café — Site de teste</title>
+  <meta name="description" content="Página de teste para a ferramenta de feedback.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #faf7f2;
+      --surface: #ffffff;
+      --ink: #1d1a16;
+      --muted: #6b645b;
+      --line: #e7e0d5;
+      --brand: #b8572f;
+      --brand-dark: #8f3f1f;
+      --soft: #f3e7dc;
+      --radius: 16px;
+      --max: 1120px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: "Inter", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+    h1, h2, h3 { font-family: "Fraunces", Georgia, serif; line-height: 1.15; font-weight: 700; }
+    h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); }
+    h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+    h3 { font-size: 1.25rem; font-weight: 500; }
+    .eyebrow { font-size: .8rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--brand); }
+    .section { padding: 96px 0; }
+    .section-head { max-width: 620px; margin-bottom: 48px; }
+    .section-head p { color: var(--muted); margin-top: 12px; }
+    .btn { display: inline-block; padding: 14px 24px; border-radius: 999px; font-weight: 600; text-decoration: none; border: 1px solid transparent; cursor: pointer; font: inherit; font-weight: 600; transition: background .2s, color .2s; }
+    .btn-primary { background: var(--brand); color: #fff; }
+    .btn-primary:hover { background: var(--brand-dark); }
+    .btn-ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
+    .btn-ghost:hover { background: var(--ink); color: #fff; }
+
+    /* Navbar */
+    .navbar { position: sticky; top: 0; z-index: 50; background: rgba(250,247,242,.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .navbar-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .logo { font-family: "Fraunces", serif; font-size: 1.4rem; font-weight: 700; text-decoration: none; }
+    .logo span { color: var(--brand); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { text-decoration: none; font-weight: 500; color: var(--muted); }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-toggle { display: none; background: none; border: 0; font-size: 1.6rem; cursor: pointer; }
+
+    /* Hero */
+    .hero { padding: 80px 0 96px; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: center; }
+    .hero p.lead { font-size: 1.15rem; color: var(--muted); margin: 20px 0 32px; max-width: 480px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero-visual { aspect-ratio: 4/5; border-radius: 28px; background:
+      radial-gradient(circle at 30% 30%, #e8b48f 0 18%, transparent 19%),
+      radial-gradient(circle at 70% 65%, #7a3a1c 0 22%, transparent 23%),
+      linear-gradient(160deg, #f0d2b8, #c86c3f 70%, #5e2b14); position: relative; overflow: hidden; }
+    .hero-badge { position: absolute; left: 20px; bottom: 20px; background: var(--surface); padding: 14px 18px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.12); }
+    .hero-badge strong { display: block; font-size: 1.3rem; }
+    .hero-badge small { color: var(--muted); }
+
+    /* Stats */
+    .stats { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .stat { padding: 32px 20px; text-align: center; border-right: 1px solid var(--line); }
+    .stat:last-child { border-right: 0; }
+    .stat strong { font-family: "Fraunces", serif; font-size: 2rem; display: block; }
+    .stat span { color: var(--muted); font-size: .9rem; }
+
+    /* Features */
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .feature-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; }
+    .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--soft); display: grid; place-items: center; font-size: 1.4rem; margin-bottom: 20px; }
+    .feature-card p { color: var(--muted); margin-top: 8px; }
+
+    /* Menu with tabs */
+    .menu { background: var(--soft); }
+    .tabs { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+    .tab { padding: 10px 18px; border-radius: 999px; border: 1px solid var(--ink); background: transparent; font: inherit; font-weight: 500; cursor: pointer; }
+    .tab.is-active { background: var(--ink); color: #fff; }
+    .menu-panel { display: none; }
+    .menu-panel.is-active { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 48px; }
+    .menu-item { display: flex; justify-content: space-between; gap: 16px; padding: 16px 0; border-bottom: 1px dashed #d5c3b1; }
+    .menu-item p { color: var(--muted); font-size: .9rem; }
+    .menu-item .price { font-weight: 600; white-space: nowrap; }
+
+    /* Split */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+    .split-visual { aspect-ratio: 1; border-radius: 28px; background: repeating-linear-gradient(45deg, #d99a74 0 18px, #c7784e 18px 36px); }
+    .split ul { list-style: none; margin: 24px 0 32px; display: grid; gap: 12px; }
+    .split li::before { content: "✓"; color: var(--brand); font-weight: 700; margin-right: 10px; }
+
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .plan { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; display: flex; flex-direction: column; }
+    .plan.is-featured { border: 2px solid var(--brand); }
+    .plan-tag { align-self: flex-start; font-size: .75rem; font-weight: 600; background: var(--brand); color: #fff; padding: 4px 10px; border-radius: 999px; margin-bottom: 12px; }
+    .plan-price { font-family: "Fraunces", serif; font-size: 2.4rem; margin: 12px 0; }
+    .plan-price small { font-family: "Inter", sans-serif; font-size: .9rem; color: var(--muted); }
+    .plan ul { list-style: none; color: var(--muted); display: grid; gap: 8px; margin-bottom: 28px; flex: 1; }
+
+    /* FAQ */
+    .faq-list { max-width: 760px; display: grid; gap: 12px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px 24px; }
+    .faq-item summary { font-weight: 600; cursor: pointer; list-style: none; display: flex; justify-content: space-between; }
+    .faq-item summary::after { content: "+"; font-size: 1.3rem; }
+    .faq-item[open] summary::after { content: "–"; }
+    .faq-item p { color: var(--muted); margin-top: 12px; }
+
+    /* Contact */
+    .contact-box { background: var(--ink); color: #fff; border-radius: 28px; padding: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .contact-box p { color: #cfc6ba; margin-top: 12px; }
+    .form { display: grid; gap: 12px; }
+    .form input, .form textarea, .form select { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid #3b352e; background: #2a251f; color: #fff; font: inherit; }
+    .form textarea { min-height: 110px; resize: vertical; }
+    .form-note { font-size: .85rem; color: #cfc6ba; min-height: 1.2em; }
+
+    /* Footer */
+    .footer { padding: 56px 0 32px; border-top: 1px solid var(--line); margin-top: 96px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+    .footer h4 { font-size: .85rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px; }
+    .footer ul { list-style: none; display: grid; gap: 8px; color: var(--muted); }
+    .footer a { text-decoration: none; }
+    .footer-bottom { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+    /* Tablet */
+    @media (max-width: 991px) {
+      .hero-grid, .split, .contact-box { grid-template-columns: 1fr; }
+      .features-grid, .pricing-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat:nth-child(2) { border-right: 0; }
+      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    /* Mobile */
+    @media (max-width: 767px) {
+      .section { padding: 64px 0; }
+      .nav-toggle { display: block; }
+      .nav-links { display: none; position: absolute; top: 72px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--bg); border-bottom: 1px solid var(--line); }
+      .nav-links.is-open { display: flex; }
+      .nav-links a { display: block; padding: 16px 20px; }
+      .navbar-cta { display: none; }
+      .features-grid, .pricing-grid, .menu-panel.is-active { grid-template-columns: 1fr; }
+      .contact-box { padding: 32px 24px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="#" class="logo">Aurora<span>.</span>café</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#cardapio">Cardápio</a></li>
+        <li><a href="#planos">Assinatura</a></li>
+        <li><a href="#faq">Dúvidas</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <a href="#contato" class="btn btn-primary navbar-cta">Reservar mesa</a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <p class="eyebrow">Torrefação própria desde 2014</p>
+          <h1>Café de origem, feito devagar.</h1>
+          <p class="lead">Grãos selecionados de pequenos produtores da Mantiqueira, torrados toda semana no nosso espaço em Pinheiros.</p>
+          <div class="hero-actions">
+            <a href="#cardapio" class="btn btn-primary">Ver cardápio</a>
+            <a href="#planos" class="btn btn-ghost">Assinar café em casa</a>
+          </div>
+        </div>
+        <div class="hero-visual" role="img" aria-label="Ilustração abstrata de grãos de café">
+          <div class="hero-badge">
+            <strong>12 origens</strong>
+            <small>no cardápio deste mês</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="container stats-grid">
+        <div class="stat"><strong>+40</strong><span>produtores parceiros</span></div>
+        <div class="stat"><strong>86 pts</strong><span>nota média SCA</span></div>
+        <div class="stat"><strong>7 dias</strong><span>da torra à xícara</span></div>
+        <div class="stat"><strong>3 lojas</strong><span>em São Paulo</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="sobre">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Por que Aurora</p>
+          <h2>Do pé de café até a sua mesa</h2>
+          <p>Acompanhamos cada etapa para garantir frescor, rastreabilidade e um preço justo para quem planta.</p>
+        </div>
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon">🌱</div>
+            <h3>Origem rastreável</h3>
+            <p>Cada pacote traz o nome do sítio, altitude e variedade do grão.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">🔥</div>
+            <h3>Torra semanal</h3>
+            <p>Torramos em pequenos lotes para que o café chegue sempre fresco.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Comércio direto</h3>
+            <p>Pagamos acima do mercado e visitamos os produtores todo ano.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section menu" id="cardapio">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Cardápio</p>
+          <h2>O que servimos hoje</h2>
+        </div>
+        <div class="tabs" role="tablist">
+          <button class="tab is-active" data-tab="cafes" role="tab">Cafés</button>
+          <button class="tab" data-tab="gelados" role="tab">Gelados</button>
+          <button class="tab" data-tab="comidas" role="tab">Para comer</button>
+        </div>
+        <div class="menu-panel is-active" id="cafes">
+          <div class="menu-item"><div><h3>Espresso</h3><p>Blend da casa, notas de chocolate e caramelo</p></div><span class="price">R$ 8</span></div>
+          <div class="menu-item"><div><h3>Coado V60</h3><p>Origem do dia, preparado na hora</p></div><span class="price">R$ 14</span></div>
+          <div class="menu-item"><div><h3>Cappuccino</h3><p>Espresso duplo com leite vaporizado</p></div><span class="price">R$ 15</span></div>
+          <div class="menu-item"><div><h3>Flat white</h3><p>Mais café, menos espuma</p></div><span class="price">R$ 16</span></div>
+        </div>
+        <div class="menu-panel" id="gelados">
+          <div class="menu-item"><div><h3>Cold brew</h3><p>Extração a frio por 18 horas</p></div><span class="price">R$ 16</span></div>
+          <div class="menu-item"><div><h3>Espresso tônica</h3><p>Com laranja-baía e alecrim</p></div><span class="price">R$ 18</span></div>
+          <div class="menu-item"><div><h3>Affogato</h3><p>Sorvete de baunilha com espresso</p></div><span class="price">R$ 19</span></div>
+        </div>
+        <div class="menu-panel" id="comidas">
+          <div class="menu-item"><div><h3>Pão de queijo</h3><p>Receita mineira, porção com 4</p></div><span class="price">R$ 12</span></div>
+          <div class="menu-item"><div><h3>Tosta de fermentação natural</h3><p>Com manteiga e geleia da casa</p></div><span class="price">R$ 18</span></div>
+          <div class="menu-item"><div><h3>Bolo do dia</h3><p>Pergunte ao balcão</p></div><span class="price">R$ 14</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div class="split-visual" role="img" aria-label="Padrão decorativo"></div>
+        <div>
+          <p class="eyebrow">Cursos</p>
+          <h2>Aprenda a extrair o melhor do seu café</h2>
+          <ul>
+            <li>Métodos filtrados: V60, Chemex e Aeropress</li>
+            <li>Espresso e vaporização de leite</li>
+            <li>Degustação e perfil sensorial</li>
+          </ul>
+          <a href="#contato" class="btn btn-ghost">Quero saber das turmas</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="planos">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Assinatura</p>
+          <h2>Café fresco na sua porta todo mês</h2>
+          <p>Escolha a quantidade, nós escolhemos as melhores origens.</p>
+        </div>
+        <div class="pricing-grid">
+          <div class="plan">
+            <h3>Descoberta</h3>
+            <div class="plan-price">R$ 59 <small>/mês</small></div>
+            <ul><li>1 pacote de 250 g</li><li>Ficha de degustação</li><li>Frete grátis em SP</li></ul>
+            <a href="#contato" class="btn btn-ghost">Assinar</a>
+          </div>
+          <div class="plan is-featured">
+            <span class="plan-tag">Mais escolhido</span>
+            <h3>Dupla</h3>
+            <div class="plan-price">R$ 109 <small>/mês</small></div>
+            <ul><li>2 pacotes de 250 g</li><li>Origens diferentes</li><li>Frete grátis no Brasil</li></ul>
+            <a href="#contato" class="btn btn-primary">Assinar</a>
+          </div>
+          <div class="plan">
+            <h3>Escritório</h3>
+            <div class="plan-price">R$ 249 <small>/mês</small></div>
+            <ul><li>2 kg em grão ou moído</li><li>Entrega quinzenal</li><li>Suporte para equipamentos</li></ul>
+            <a href="#contato" class="btn btn-ghost">Falar com a gente</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Dúvidas</p>
+          <h2>Perguntas frequentes</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Posso pausar a assinatura?</summary>
+            <p>Sim, a qualquer momento pelo seu painel, sem multa.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Vocês moem o café?</summary>
+            <p>Moemos para o método que você indicar no cadastro, ou enviamos em grão.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Fazem entrega fora de São Paulo?</summary>
+            <p>Entregamos para todo o Brasil pelos Correios, em 3 a 8 dias úteis.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contato">
+      <div class="container">
+        <div class="contact-box">
+          <div>
+            <p class="eyebrow">Contato</p>
+            <h2>Reserve uma mesa ou tire uma dúvida</h2>
+            <p>Rua dos Pinheiros, 000 · São Paulo<br>Seg a sáb, 8h às 19h</p>
+          </div>
+          <form class="form" id="contact-form">
+            <input type="text" name="nome" placeholder="Seu nome" required>
+            <input type="email" name="email" placeholder="Seu e-mail" required>
+            <select name="assunto">
+              <option>Reserva de mesa</option>
+              <option>Assinatura</option>
+              <option>Cursos</option>
+              <option>Outro assunto</option>
+            </select>
+            <textarea name="mensagem" placeholder="Mensagem"></textarea>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <p class="form-note" id="form-note"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#" class="logo">Aurora<span>.</span>café</a>
+          <p style="color:var(--muted);margin-top:12px;max-width:280px">Site fictício, criado para testes da ferramenta de feedback.</p>
+        </div>
+        <div><h4>Navegação</h4><ul><li><a href="#sobre">Sobre</a></li><li><a href="#cardapio">Cardápio</a></li><li><a href="#planos">Assinatura</a></li></ul></div>
+        <div><h4>Ajuda</h4><ul><li><a href="#faq">Dúvidas</a></li><li><a href="#contato">Contato</a></li></ul></div>
+        <div><h4>Redes</h4><ul><li><a href="#">Instagram</a></li><li><a href="#">YouTube</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Aurora Café (fictício)</span>
+        <span>Página de teste</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Menu mobile
+    document.getElementById('nav-toggle').addEventListener('click', function () {
+      document.getElementById('nav-links').classList.toggle('is-open');
+    });
+    document.querySelectorAll('.nav-links a').forEach(function (a) {
+      a.addEventListener('click', function () { document.getElementById('nav-links').classList.remove('is-open'); });
+    });
+    // Abas do cardápio
+    document.querySelectorAll('.tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('is-active'); });
+        document.querySelectorAll('.menu-panel').forEach(function (p) { p.classList.remove('is-active'); });
+        tab.classList.add('is-active');
+        document.getElementById(tab.dataset.tab).classList.add('is-active');
+      });
+    });
+    // Formulário (não envia nada)
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      document.getElementById('form-note').textContent = 'Mensagem recebida! (formulário de teste, nada foi enviado)';
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
